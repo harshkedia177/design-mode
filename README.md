@@ -46,7 +46,7 @@ You point, you type, Claude builds.
 
 **2. Install the plugin:**
 ```
-/plugin marketplace add harshkedia177/design-mode-plugin
+/plugin marketplace add harshkedia177/design-mode
 ```
 
 **3. Go:**
@@ -220,7 +220,7 @@ Design Mode auto-discovers the debugging port from these locations:
 <summary><strong>Claude Code Plugin (recommended — full experience)</strong></summary>
 
 ```
-/plugin marketplace add harshkedia177/design-mode-plugin
+/plugin marketplace add harshkedia177/design-mode
 ```
 
 This gives you:
@@ -541,7 +541,7 @@ Design Mode auto-detects the source file for annotated elements using framework-
    ```
    If `design-mode` isn't listed, reinstall:
    ```
-   /plugin marketplace add harshkedia177/design-mode-plugin
+   /plugin marketplace add harshkedia177/design-mode
    ```
 
 </details>
