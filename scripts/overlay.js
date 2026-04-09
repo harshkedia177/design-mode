@@ -77,43 +77,50 @@
 
   // ─── Design Tokens ──────────────────────────────────────────
   const T = {
-    // Surfaces — neutral near-blacks, no tint
-    bg: '#111111',
-    bgElevated: '#1a1a1a',
-    bgToolbar: '#1a1a1a',
-    // Text — high contrast, clean
-    text: '#e0e0e0',
-    textMuted: '#666666',
-    // Accent — burnt vermillion, the only color
+    // Surfaces — deep blacks, layered
+    bg: '#0c0c0c',
+    bgElevated: '#161616',
+    bgToolbar: '#141414',
+    bgInset: '#0a0a0a',
+    // Text
+    text: '#d1d1d1',
+    textMuted: '#8a8a8a',
+    textBright: '#ffffff',
+    // Accent — burnt vermillion, sole color
     accent: '#e8590c',
-    accentHover: 'rgba(232,89,12,0.08)',
-    accentSelected: 'rgba(232,89,12,0.14)',
+    accentHover: 'rgba(232,89,12,0.10)',
+    accentSelected: 'rgba(232,89,12,0.16)',
     accentFocus: 'rgba(232,89,12,0.35)',
-    accentFocusRing: '0 0 0 2px rgba(232,89,12,0.15)',
+    accentFocusRing: '0 0 0 2px rgba(232,89,12,0.18)',
+    accentGlow: '0 0 8px rgba(232,89,12,0.15), 0 0 3px rgba(232,89,12,0.25)',
     // Semantic
     danger: '#c4382a',
     success: '#2d8a4e',
-    // Borders
-    border: 'rgba(255,255,255,0.08)',
-    borderFaint: 'rgba(255,255,255,0.05)',
+    // Borders — subtle bevel system
+    border: 'rgba(255,255,255,0.07)',
+    borderFaint: 'rgba(255,255,255,0.04)',
+    borderHighlight: 'rgba(255,255,255,0.10)',
     hoverBg: 'rgba(255,255,255,0.06)',
     hoverBgSubtle: 'rgba(255,255,255,0.03)',
     // Box model overlays
     boxMargin: 'rgba(214,133,110,0.2)',
     boxPadding: 'rgba(110,214,162,0.2)',
     boxBorder: 'rgba(214,198,110,0.3)',
-    // Shadows
-    shadowSm: '0 2px 8px rgba(0,0,0,0.4)',
-    shadowMd: '0 4px 16px rgba(0,0,0,0.45)',
-    shadowLg: '0 8px 24px rgba(0,0,0,0.5)',
-    shadowPin: '0 1px 4px rgba(0,0,0,0.4)',
-    shadowMenu: '0 4px 16px rgba(0,0,0,0.5)',
+    // Shadows — deep, layered
+    shadowSm: '0 2px 8px rgba(0,0,0,0.5)',
+    shadowMd: '0 4px 20px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)',
+    shadowLg: '0 8px 32px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4)',
+    shadowPin: '0 1px 4px rgba(0,0,0,0.5)',
+    shadowMenu: '0 8px 32px rgba(0,0,0,0.7)',
+    shadowInset: 'inset 0 1px 3px rgba(0,0,0,0.5)',
+    shadowDock: '0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
     // Typography
     font: "-apple-system,SF Pro Display,system-ui,sans-serif",
-    // Radius — purposeful scale
+    // Radius
     radiusSm: '2px',
-    radius: '4px',
-    radiusLg: '8px',
+    radius: '6px',
+    radiusLg: '12px',
+    radiusPill: '999px',
   };
 
   // Backwards-compat alias used by _dump and box model overlays
@@ -128,9 +135,12 @@
   };
 
   // Shared style fragments
-  const GHOST_BTN = `padding:4px 10px;background:transparent;color:${T.textMuted};border:1px solid ${T.border};border-radius:${T.radius};cursor:pointer;font-size:11px;font-weight:500;letter-spacing:0.4px;`;
-  const MENU_ITEM = `display:block;width:100%;text-align:left;padding:6px 12px;background:none;color:${T.text};border:none;cursor:pointer;font-size:11px;font-family:inherit;`;
+  const DOCK_BTN = `padding:6px 14px;background:${T.bgInset};color:${T.textMuted};border:1px solid ${T.border};border-radius:${T.radiusPill};cursor:pointer;font-size:11px;font-weight:500;letter-spacing:0.3px;box-shadow:${T.shadowInset};`;
+  const DOCK_BTN_PRIMARY = `padding:6px 14px;background:${T.accent};color:${T.textBright};border:none;border-radius:${T.radiusPill};cursor:pointer;font-size:11px;font-weight:600;letter-spacing:0.3px;box-shadow:${T.accentGlow};`;
+  const MENU_ITEM = `display:block;width:100%;text-align:left;padding:7px 14px;background:none;color:${T.text};border:none;cursor:pointer;font-size:11px;font-family:inherit;`;
   const PANEL_BASE = `border:1px solid ${T.border};border-radius:${T.radiusLg};box-shadow:${T.shadowLg};font-family:${T.font};`;
+  // Legacy alias
+  const GHOST_BTN = DOCK_BTN;
 
   // ─── State ──────────────────────────────────────────────────
   let elementCounter = 0;
@@ -170,7 +180,7 @@
 
   // Element info tooltip
   const tooltip = document.createElement('div');
-  tooltip.style.cssText = 'position:fixed;pointer-events:none;background:' + T.bgElevated + ';color:' + T.text + ';font:11px/1.4 ' + T.font + ';padding:4px 10px;border-radius:' + T.radiusSm + ';border:1px solid ' + T.border + ';display:none;z-index:' + PANEL_Z + ';white-space:nowrap;max-width:400px;overflow:hidden;text-overflow:ellipsis;';
+  tooltip.style.cssText = 'position:fixed;pointer-events:none;background:' + T.bgElevated + ';color:' + T.text + ';font:11px/1.4 ' + T.font + ';padding:5px 12px;border-radius:' + T.radiusPill + ';border:1px solid ' + T.border + ';display:none;z-index:' + PANEL_Z + ';white-space:nowrap;max-width:400px;overflow:hidden;text-overflow:ellipsis;box-shadow:' + T.shadowMd + ';';
   root.appendChild(tooltip);
 
   // Annotation input panel
@@ -178,13 +188,13 @@
   annotationPanel.setAttribute('role', 'dialog');
   annotationPanel.setAttribute('aria-label', 'Annotate element');
   annotationPanel.setAttribute('aria-modal', 'false');
-  annotationPanel.style.cssText = 'position:fixed;display:none;z-index:' + PANEL_Z + ';pointer-events:auto;background:' + T.bgElevated + ';' + PANEL_BASE + 'padding:14px;width:300px;';
+  annotationPanel.style.cssText = 'position:fixed;display:none;z-index:' + PANEL_Z + ';pointer-events:auto;background:' + T.bgElevated + ';' + PANEL_BASE + 'padding:16px;width:300px;';
   annotationPanel.innerHTML = `
-    <div style="color:${T.text};font-size:13px;margin-bottom:8px;font-weight:600;letter-spacing:0.3px;" id="__dm-annotation-title">Annotate Element #0</div>
-    <textarea id="__dm-annotation-input" placeholder="Describe what to change..." aria-label="Annotation comment" style="width:100%;box-sizing:border-box;height:60px;background:${T.bg};color:${T.text};border:1px solid ${T.border};border-radius:${T.radius};padding:8px;font-size:13px;resize:vertical;font-family:inherit;outline:none;"></textarea>
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button id="__dm-annotation-save" style="flex:1;padding:6px 12px;background:${T.accent};color:white;border:none;border-radius:${T.radius};cursor:pointer;font-size:11px;font-weight:600;letter-spacing:0.4px;">Save</button>
-      <button id="__dm-annotation-cancel" style="flex:1;padding:6px 12px;background:transparent;color:${T.textMuted};border:1px solid ${T.border};border-radius:${T.radius};cursor:pointer;font-size:11px;letter-spacing:0.4px;">Cancel</button>
+    <div style="color:${T.text};font-size:13px;margin-bottom:10px;font-weight:600;letter-spacing:0.3px;" id="__dm-annotation-title">Annotate Element #0</div>
+    <textarea id="__dm-annotation-input" placeholder="Describe what to change..." aria-label="Annotation comment" style="width:100%;box-sizing:border-box;height:60px;background:${T.bgInset};color:${T.text};border:1px solid ${T.border};border-radius:${T.radius};padding:8px;font-size:13px;resize:vertical;font-family:inherit;outline:none;box-shadow:${T.shadowInset};"></textarea>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button id="__dm-annotation-save" style="${DOCK_BTN_PRIMARY}flex:1;">Save</button>
+      <button id="__dm-annotation-cancel" style="${DOCK_BTN}flex:1;">Cancel</button>
     </div>
   `;
   root.appendChild(annotationPanel);
@@ -227,19 +237,21 @@
   toolbar.setAttribute('role', 'toolbar');
   toolbar.setAttribute('aria-label', 'Design Mode controls');
   toolbar.style.cssText = `
-    position:fixed;top:12px;right:12px;z-index:${TOOLBAR_Z};
+    position:fixed;top:14px;right:14px;z-index:${TOOLBAR_Z};
     pointer-events:auto;background:${T.bgToolbar};
-    border:1px solid ${T.border};border-radius:${T.radiusLg};
-    padding:8px 14px;display:flex;gap:6px;align-items:center;
-    box-shadow:${T.shadowMd};
+    border:1px solid ${T.borderHighlight};border-radius:${T.radiusPill};
+    padding:6px 8px;display:flex;gap:5px;align-items:center;
+    box-shadow:${T.shadowDock};
     font-family:${T.font};font-size:11px;color:${T.text};
     opacity:0;transform:translateY(-12px);user-select:none;
   `;
   toolbar.innerHTML = `
-    <span id="__dm-drag-handle" style="display:flex;align-items:center;gap:6px;margin-right:4px;cursor:grab;" title="Drag to reposition"><span style="color:${T.textMuted};font-size:10px;line-height:1;letter-spacing:2px;opacity:0.6;">⋮⋮</span><span style="font-weight:600;font-size:13px;letter-spacing:0.5px;">Design Mode</span></span>
+    <span id="__dm-drag-handle" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:${T.bgInset};border:1px solid ${T.border};box-shadow:${T.shadowInset}, ${T.accentGlow};cursor:grab;flex-shrink:0;" title="Drag to reposition">
+      <span style="display:block;width:8px;height:8px;border-radius:50%;background:${T.accent};box-shadow:0 0 4px rgba(232,89,12,0.3);"></span>
+    </span>
     <div style="position:relative;">
-      <button id="__dm-btn-tools" title="Tools" aria-label="Tools menu" aria-expanded="false" style="${GHOST_BTN}">Tools ▾</button>
-      <div id="__dm-tools-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:${T.bgElevated};border:1px solid ${T.border};border-radius:${T.radius};padding:4px 0;min-width:140px;box-shadow:${T.shadowMenu};z-index:1;">
+      <button id="__dm-btn-tools" title="Tools" aria-label="Tools menu" aria-expanded="false" style="${DOCK_BTN}">Tools ▾</button>
+      <div id="__dm-tools-menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:${T.bgElevated};border:1px solid ${T.borderHighlight};border-radius:${T.radiusLg};padding:4px 0;min-width:160px;box-shadow:${T.shadowMenu};z-index:1;">
         <button id="__dm-btn-refresh" style="${MENU_ITEM}" title="Re-scan elements">Refresh elements</button>
         <div style="height:1px;background:${T.borderFaint};margin:4px 0;"></div>
         <button id="__dm-btn-375" style="${MENU_ITEM}" title="Mobile 375px">Mobile — 375px</button>
@@ -248,9 +260,9 @@
         <button id="__dm-btn-reset" style="${MENU_ITEM}" title="Reset viewport">Reset viewport</button>
       </div>
     </div>
-    <button id="__dm-btn-list" title="Show annotations list" aria-label="Show annotations list" style="${GHOST_BTN}">Notes <span id="__dm-count" aria-label="annotation count">0</span></button>
-    <button id="__dm-btn-copy" title="Copy annotations to clipboard" aria-label="Copy annotations to clipboard" style="padding:4px 10px;background:${T.accent};color:white;border:none;border-radius:${T.radius};cursor:pointer;font-size:11px;font-weight:600;letter-spacing:0.4px;">Copy to Claude</button>
-    <button id="__dm-btn-toggle" title="Toggle Design Mode (Ctrl+Shift+D)" aria-label="Toggle Design Mode" style="${GHOST_BTN}color:${T.textMuted};">Hide</button>
+    <button id="__dm-btn-list" title="Show annotations list" aria-label="Show annotations list" style="${DOCK_BTN}">Notes <span id="__dm-count" aria-label="annotation count" style="color:${T.accent};">0</span></button>
+    <button id="__dm-btn-copy" title="Copy annotations to clipboard" aria-label="Copy annotations to clipboard" style="${DOCK_BTN_PRIMARY}">Copy to Claude</button>
+    <button id="__dm-btn-toggle" title="Toggle Design Mode (Ctrl+Shift+D)" aria-label="Toggle Design Mode" style="${DOCK_BTN}color:${T.textMuted};">Hide</button>
   `;
   root.appendChild(toolbar);
 
@@ -301,8 +313,8 @@
   listPanel.setAttribute('role', 'region');
   listPanel.setAttribute('aria-label', 'Annotations list');
   listPanel.style.cssText = `
-    position:fixed;top:56px;right:12px;z-index:${PANEL_Z};
-    pointer-events:auto;background:${T.bg};${PANEL_BASE}
+    position:fixed;top:60px;right:14px;z-index:${PANEL_Z};
+    pointer-events:auto;background:${T.bgElevated};${PANEL_BASE}
     width:320px;max-height:60vh;overflow-y:auto;display:none;
   `;
   listPanel.innerHTML = `
@@ -773,7 +785,7 @@
       position:fixed;left:${rect.right - 12}px;top:${rect.top - 12}px;
       width:24px;height:24px;background:${T.accent};border:2px solid ${T.bg};
       border-radius:50%;pointer-events:auto;cursor:pointer;
-      box-shadow:${T.shadowPin};z-index:${OVERLAY_Z + 1};
+      box-shadow:${T.shadowPin}, 0 0 6px rgba(232,89,12,0.2);z-index:${OVERLAY_Z + 1};
       display:flex;align-items:center;justify-content:center;
       font:bold 10px ${T.font};color:white;
       transition:${transition('transform 0.15s')};
@@ -853,7 +865,7 @@
           </div>
           <div style="display:flex;gap:4px;flex-shrink:0;">
             <button class="__dm-list-edit" data-idx="${idx}" style="background:transparent;color:${T.accent};border:1px solid ${T.border};border-radius:4px;padding:3px 6px;cursor:pointer;font-size:10px;">Edit</button>
-            <button class="__dm-list-delete" data-idx="${idx}" style="background:transparent;color:${T.danger};border:1px solid ${T.border};border-radius:4px;padding:3px 6px;cursor:pointer;font-size:10px;">Del</button>
+            <button class="__dm-list-delete" data-idx="${idx}" style="background:${T.bgInset};color:${T.danger};border:1px solid ${T.border};border-radius:${T.radiusPill};padding:3px 8px;cursor:pointer;font-size:10px;box-shadow:${T.shadowInset};">Del</button>
           </div>
         </div>
       `;
@@ -984,10 +996,10 @@
     toast.setAttribute('aria-live', 'polite');
     toast.style.cssText = `
       position:fixed;bottom:20px;left:50%;
-      background:${T.bgElevated};color:${T.text};padding:8px 16px;border-radius:${T.radius};
-
-      font:13px/1.4 ${T.font};z-index:${PANEL_Z + 1};
-      box-shadow:${T.shadowSm};
+      background:${T.bgElevated};color:${T.text};padding:10px 20px;border-radius:${T.radiusPill};
+      border:1px solid ${T.border};
+      font:12px/1.4 ${T.font};z-index:${PANEL_Z + 1};
+      box-shadow:${T.shadowMd};
       pointer-events:none;opacity:0;transform:translateX(-50%) translateY(8px);
     `;
     toast.textContent = msg;
@@ -1016,11 +1028,11 @@
     root.style.display = state.active ? '' : 'none';
     if (state.active) {
       toggleBtn.textContent = 'Hide';
-      toggleBtn.style.background = 'transparent';
+      toggleBtn.style.background = T.bgInset;
       toggleBtn.style.color = T.textMuted;
     } else {
       toggleBtn.textContent = 'Show';
-      toggleBtn.style.background = 'transparent';
+      toggleBtn.style.background = T.bgInset;
       toggleBtn.style.color = T.accent;
     }
     toolbar.style.display = 'flex';
