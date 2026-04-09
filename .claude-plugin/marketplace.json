@@ -3,6 +3,9 @@
   "owner": {
     "name": "Harsh Kedia"
   },
+  "metadata": {
+    "description": "Visual Design Mode for Claude Code — annotate, inspect, and modify UI elements directly in the browser with AI-powered source code editing"
+  },
   "plugins": [
     {
       "name": "design-mode",

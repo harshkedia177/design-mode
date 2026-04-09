@@ -20,6 +20,8 @@
     "devtools",
     "overlay"
   ],
+  "agents": "./agents",
+  "hooks": "./hooks/hooks.json",
   "mcpServers": {
     "design-mode": {
       "command": "node",
