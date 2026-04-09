@@ -77,7 +77,7 @@
 
   // ─── Design Tokens ──────────────────────────────────────────
   const T = {
-    // Surfaces — deep blacks, layered
+    // Surfaces
     bg: '#0c0c0c',
     bgElevated: '#161616',
     bgToolbar: '#141414',
@@ -86,7 +86,7 @@
     text: '#d1d1d1',
     textMuted: '#8a8a8a',
     textBright: '#ffffff',
-    // Accent — burnt vermillion, sole color
+    // Accent
     accent: '#e8590c',
     accentHover: 'rgba(232,89,12,0.10)',
     accentSelected: 'rgba(232,89,12,0.16)',
@@ -96,7 +96,7 @@
     // Semantic
     danger: '#c4382a',
     success: '#2d8a4e',
-    // Borders — subtle bevel system
+    // Borders
     border: 'rgba(255,255,255,0.07)',
     borderFaint: 'rgba(255,255,255,0.04)',
     borderHighlight: 'rgba(255,255,255,0.10)',
@@ -106,7 +106,7 @@
     boxMargin: 'rgba(214,133,110,0.2)',
     boxPadding: 'rgba(110,214,162,0.2)',
     boxBorder: 'rgba(214,198,110,0.3)',
-    // Shadows — deep, layered
+    // Shadows
     shadowSm: '0 2px 8px rgba(0,0,0,0.5)',
     shadowMd: '0 4px 20px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)',
     shadowLg: '0 8px 32px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4)',
@@ -121,17 +121,6 @@
     radius: '6px',
     radiusLg: '12px',
     radiusPill: '999px',
-  };
-
-  // Backwards-compat alias used by _dump and box model overlays
-  const COLORS = {
-    hover: T.accentHover,
-    selected: T.accentSelected,
-    margin: T.boxMargin,
-    padding: T.boxPadding,
-    border: T.boxBorder,
-    toolbar: T.bg,
-    toolbarText: T.text,
   };
 
   // Shared style fragments
@@ -164,16 +153,16 @@
 
   // Hover overlay
   const hoverOverlay = document.createElement('div');
-  hoverOverlay.style.cssText = 'position:fixed;pointer-events:none;border:2px solid ' + T.accent + ';background:' + COLORS.hover + ';transition:' + transition('all 0.1s ease') + ';display:none;z-index:' + OVERLAY_Z + ';';
+  hoverOverlay.style.cssText = 'position:fixed;pointer-events:none;border:2px solid ' + T.accent + ';background:' + T.accentHover + ';transition:' + transition('all 0.1s ease') + ';display:none;z-index:' + OVERLAY_Z + ';';
   root.appendChild(hoverOverlay);
 
   // Box model overlays
   const marginOverlay = document.createElement('div');
-  marginOverlay.style.cssText = 'position:fixed;pointer-events:none;background:' + COLORS.margin + ';display:none;z-index:' + (OVERLAY_Z - 2) + ';';
+  marginOverlay.style.cssText = 'position:fixed;pointer-events:none;background:' + T.boxMargin + ';display:none;z-index:' + (OVERLAY_Z - 2) + ';';
   root.appendChild(marginOverlay);
 
   const paddingOverlay = document.createElement('div');
-  paddingOverlay.style.cssText = 'position:fixed;pointer-events:none;background:' + COLORS.padding + ';display:none;z-index:' + (OVERLAY_Z - 1) + ';';
+  paddingOverlay.style.cssText = 'position:fixed;pointer-events:none;background:' + T.boxPadding + ';display:none;z-index:' + (OVERLAY_Z - 1) + ';';
   root.appendChild(paddingOverlay);
 
   // Element info tooltip
@@ -197,7 +186,6 @@
   `;
   root.appendChild(annotationPanel);
 
-  // Cache annotation panel elements (avoid repeated querySelector)
   const annotationTitle = annotationPanel.querySelector('#__dm-annotation-title');
   const annotationInput = annotationPanel.querySelector('#__dm-annotation-input');
   const annotationSaveBtn = annotationPanel.querySelector('#__dm-annotation-save');
@@ -580,26 +568,21 @@
 
   // ─── Hover Handling ─────────────────────────────────────────
   let hoverRafPending = false;
-  let hoverTarget = null;
   function handleMouseMove(e) {
     if (!state.active) return;
-    // Ignore our own UI — hide immediately, no rAF needed
     if (e.target.closest('#__design-mode-root')) {
       hoverOverlay.style.display = 'none';
       marginOverlay.style.display = 'none';
       paddingOverlay.style.display = 'none';
       tooltip.style.display = 'none';
       hoveredEl = null;
-      hoverTarget = null;
       return;
     }
 
     const el = e.target;
     if (el === hoveredEl) return;
     hoveredEl = el;
-    hoverTarget = el;
 
-    // Defer expensive style reads to next animation frame
     if (hoverRafPending) return;
     hoverRafPending = true;
     requestAnimationFrame(updateHoverOverlay);
@@ -607,20 +590,18 @@
 
   function updateHoverOverlay() {
     hoverRafPending = false;
-    const el = hoverTarget;
+    const el = hoveredEl;
     if (!el || !el.isConnected) return;
 
     const rect = el.getBoundingClientRect();
     const cs = window.getComputedStyle(el);
 
-    // Position hover overlay
     hoverOverlay.style.display = 'block';
     hoverOverlay.style.left = rect.left + 'px';
     hoverOverlay.style.top = rect.top + 'px';
     hoverOverlay.style.width = rect.width + 'px';
     hoverOverlay.style.height = rect.height + 'px';
 
-    // Box model: margin
     const mt = parseFloat(cs.marginTop), mr = parseFloat(cs.marginRight);
     const mb = parseFloat(cs.marginBottom), ml = parseFloat(cs.marginLeft);
     marginOverlay.style.display = 'block';
@@ -629,7 +610,6 @@
     marginOverlay.style.width = (rect.width + ml + mr) + 'px';
     marginOverlay.style.height = (rect.height + mt + mb) + 'px';
 
-    // Box model: padding
     const pt = parseFloat(cs.paddingTop), pr = parseFloat(cs.paddingRight);
     const pb = parseFloat(cs.paddingBottom), pl = parseFloat(cs.paddingLeft);
     const bt = parseFloat(cs.borderTopWidth), br2 = parseFloat(cs.borderRightWidth);
@@ -694,7 +674,6 @@
 
     annotationTitle.textContent = entry.componentName ? `${entry.componentName}` : `<${entry.tagName}>`;
     annotationTitle.title = `Element #${dmId} — <${entry.tagName}>${entry.componentName ? ' (' + entry.componentName + ')' : ''}`;
-    // textContent is already safe — no innerHTML here
     annotationInput.value = entry.annotation || '';
 
     // Position panel near element using actual panel dimensions
@@ -764,9 +743,6 @@
     annotationTriggerEl = null;
   }
 
-  function cancelAnnotation() {
-    closeAnnotationPanel();
-  }
 
   // ─── Annotation Pins (visual markers on annotated elements) ──
   function createPin(elementId) {
@@ -1093,7 +1069,7 @@
     // Escape to close annotation panel
     if (e.key === 'Escape') {
       if (annotationPanel.style.display !== 'none') {
-        cancelAnnotation();
+        closeAnnotationPanel();
         return;
       }
       // Also clear keyboard nav highlight
@@ -1132,7 +1108,6 @@
       const id = ids[keyNavIndex];
       const entry = state.elements.get(id);
       if (entry && entry._el.isConnected) {
-        // Select and open annotation panel
         state.elements.forEach((ent, eid) => { if (eid !== id) ent.selected = false; });
         entry.selected = true;
         showAnnotationPanel(id, entry._el);
@@ -1197,7 +1172,7 @@
   onClick(toolbar.querySelector('#__dm-btn-copy'), copyToClipboard);
   onClick(toggleBtn, toggle);
   onClick(annotationPanel.querySelector('#__dm-annotation-save'), saveAnnotation);
-  onClick(annotationPanel.querySelector('#__dm-annotation-cancel'), cancelAnnotation);
+  onClick(annotationPanel.querySelector('#__dm-annotation-cancel'), closeAnnotationPanel);
   onClick(listPanel.querySelector('#__dm-list-close'), () => {
     if (listPanelOpen) {
       animateOut(listPanel, { opacity: '0', transform: 'translateX(12px)' }, 280, () => {
@@ -1217,15 +1192,13 @@
       entry.rect = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
     });
     updatePinPositions();
-    // Reposition hover overlay to follow the element during scroll
-    if (hoverTarget && hoverTarget.isConnected) {
+    if (hoveredEl && hoveredEl.isConnected) {
       updateHoverOverlay();
-    } else if (hoverTarget) {
+    } else if (hoveredEl) {
       hoverOverlay.style.display = 'none';
       marginOverlay.style.display = 'none';
       paddingOverlay.style.display = 'none';
       tooltip.style.display = 'none';
-      hoverTarget = null;
       hoveredEl = null;
     }
     state.viewport = { width: window.innerWidth, height: window.innerHeight };
@@ -1247,8 +1220,8 @@
     if (!btn || prefersReducedMotion) return;
     btn.style.transition = `background 150ms ${EASE_OUT_QUART}, color 150ms ${EASE_OUT_QUART}, transform 100ms ${EASE_OUT_QUART}`;
     btn.addEventListener('mouseenter', () => {
-      const isPrimary = btn.id === '__dm-btn-copy';
-      if (!isPrimary) btn.style.background = T.hoverBg;
+      const isCopy = btn.id === '__dm-btn-copy';
+      if (!isCopy) btn.style.background = T.hoverBg;
       btn.style.color = T.text;
     });
     btn.addEventListener('mouseleave', () => {

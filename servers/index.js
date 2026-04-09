@@ -28,12 +28,10 @@ function discoverChrome() {
       if (existsSync(filePath)) {
         const lines = readFileSync(filePath, "utf-8").trim().split("\n");
         const port = parseInt(lines[0], 10);
-        const wsPath = lines[1] || null;
+        const wsPath = lines[1];
         if (port > 0 && port < 65536) return { port, wsPath };
       }
-    } catch {
-      continue;
-    }
+    } catch {}
   }
   return null;
 }
@@ -97,7 +95,6 @@ class RawCDPClient {
       navigate: (params) => this._send("Page.navigate", params),
       loadEventFired: () =>
         new Promise((resolve) => {
-          // Listen for Page.loadEventFired event
           const handler = (raw) => {
             try {
               const msg = JSON.parse(raw.toString());
@@ -110,7 +107,7 @@ class RawCDPClient {
           this._ws.on("message", handler);
           setTimeout(() => {
             this._ws.removeListener("message", handler);
-            resolve(); // Don't hang forever
+            resolve();
           }, 30000);
         }),
       captureScreenshot: (params) =>
@@ -202,7 +199,6 @@ async function getClient() {
   const discovered = discoverChrome();
 
   // Strategy 1: Raw WebSocket + Target.attachToTarget (chrome://inspect method)
-  // This is the primary strategy — works with chrome://inspect remote debugging
   let lastError;
   if (discovered?.wsPath) {
     try {
@@ -214,7 +210,6 @@ async function getClient() {
   }
 
   // Strategy 2: Standard CDP HTTP (--remote-debugging-port method)
-  // Uses chrome-remote-interface for ports with full HTTP API
   const ports = [];
   if (process.env.CDP_PORT) ports.push(parseInt(process.env.CDP_PORT, 10));
   if (discovered) ports.push(discovered.port);
@@ -229,7 +224,6 @@ async function getClient() {
       return client;
     } catch (err) {
       lastError = err;
-      continue;
     }
   }
 
@@ -560,7 +554,7 @@ server.tool(
 
       const { data } = await c.Page.captureScreenshot({
         format: "png",
-        ...(clip ? { clip: { ...clip, scale: clip.scale } } : {}),
+        ...(clip ? { clip } : {}),
       });
 
       return {
