@@ -139,8 +139,6 @@
   const DOCK_BTN_PRIMARY = `padding:6px 14px;background:${T.accent};color:${T.textBright};border:none;border-radius:${T.radiusPill};cursor:pointer;font-size:11px;font-weight:600;letter-spacing:0.3px;box-shadow:${T.accentGlow};`;
   const MENU_ITEM = `display:block;width:100%;text-align:left;padding:7px 14px;background:none;color:${T.text};border:none;cursor:pointer;font-size:11px;font-family:inherit;`;
   const PANEL_BASE = `border:1px solid ${T.border};border-radius:${T.radiusLg};box-shadow:${T.shadowLg};font-family:${T.font};`;
-  // Legacy alias
-  const GHOST_BTN = DOCK_BTN;
 
   // ─── State ──────────────────────────────────────────────────
   let elementCounter = 0;
@@ -247,7 +245,7 @@
   `;
   toolbar.innerHTML = `
     <span id="__dm-drag-handle" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:${T.bgInset};border:1px solid ${T.border};box-shadow:${T.shadowInset}, ${T.accentGlow};cursor:grab;flex-shrink:0;" title="Drag to reposition">
-      <span style="display:block;width:8px;height:8px;border-radius:50%;background:${T.accent};box-shadow:0 0 4px rgba(232,89,12,0.3);"></span>
+      <span style="display:block;width:8px;height:8px;border-radius:50%;background:${T.accent};box-shadow:${T.accentGlow};"></span>
     </span>
     <div style="position:relative;">
       <button id="__dm-btn-tools" title="Tools" aria-label="Tools menu" aria-expanded="false" style="${DOCK_BTN}">Tools ▾</button>
@@ -785,7 +783,7 @@
       position:fixed;left:${rect.right - 12}px;top:${rect.top - 12}px;
       width:24px;height:24px;background:${T.accent};border:2px solid ${T.bg};
       border-radius:50%;pointer-events:auto;cursor:pointer;
-      box-shadow:${T.shadowPin}, 0 0 6px rgba(232,89,12,0.2);z-index:${OVERLAY_Z + 1};
+      box-shadow:${T.shadowPin}, ${T.accentGlow};z-index:${OVERLAY_Z + 1};
       display:flex;align-items:center;justify-content:center;
       font:bold 10px ${T.font};color:white;
       transition:${transition('transform 0.15s')};
@@ -864,7 +862,7 @@
             ${text ? `<div style="color:${T.textMuted};font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">"${esc(text)}"</div>` : ''}
           </div>
           <div style="display:flex;gap:4px;flex-shrink:0;">
-            <button class="__dm-list-edit" data-idx="${idx}" style="background:transparent;color:${T.accent};border:1px solid ${T.border};border-radius:4px;padding:3px 6px;cursor:pointer;font-size:10px;">Edit</button>
+            <button class="__dm-list-edit" data-idx="${idx}" style="background:${T.bgInset};color:${T.accent};border:1px solid ${T.border};border-radius:${T.radiusPill};padding:3px 8px;cursor:pointer;font-size:10px;box-shadow:${T.shadowInset};">Edit</button>
             <button class="__dm-list-delete" data-idx="${idx}" style="background:${T.bgInset};color:${T.danger};border:1px solid ${T.border};border-radius:${T.radiusPill};padding:3px 8px;cursor:pointer;font-size:10px;box-shadow:${T.shadowInset};">Del</button>
           </div>
         </div>
@@ -1026,13 +1024,12 @@
   function toggle() {
     state.active = !state.active;
     root.style.display = state.active ? '' : 'none';
+    toggleBtn.style.background = T.bgInset;
     if (state.active) {
       toggleBtn.textContent = 'Hide';
-      toggleBtn.style.background = T.bgInset;
       toggleBtn.style.color = T.textMuted;
     } else {
       toggleBtn.textContent = 'Show';
-      toggleBtn.style.background = T.bgInset;
       toggleBtn.style.color = T.accent;
     }
     toolbar.style.display = 'flex';
@@ -1250,16 +1247,15 @@
     if (!btn || prefersReducedMotion) return;
     btn.style.transition = `background 150ms ${EASE_OUT_QUART}, color 150ms ${EASE_OUT_QUART}, transform 100ms ${EASE_OUT_QUART}`;
     btn.addEventListener('mouseenter', () => {
-      if (btn.style.background === 'transparent' || btn.style.background === '') {
-        btn.style.background = T.hoverBg;
-      }
+      const isPrimary = btn.id === '__dm-btn-copy';
+      if (!isPrimary) btn.style.background = T.hoverBg;
       btn.style.color = T.text;
     });
     btn.addEventListener('mouseleave', () => {
       const isCopy = btn.id === '__dm-btn-copy';
       const isToggle = btn.id === '__dm-btn-toggle';
-      btn.style.background = isCopy ? T.accent : 'transparent';
-      btn.style.color = isCopy ? 'white' : (isToggle ? (state.active ? T.danger : T.success) : T.textMuted);
+      btn.style.background = isCopy ? T.accent : T.bgInset;
+      btn.style.color = isCopy ? T.textBright : (isToggle ? (state.active ? T.danger : T.success) : T.textMuted);
     });
     btn.addEventListener('mousedown', () => { btn.style.transform = 'scale(0.96)'; });
     btn.addEventListener('mouseup', () => { btn.style.transform = 'scale(1)'; });
