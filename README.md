@@ -42,7 +42,7 @@ You point, you type, Claude builds.
 
 ## Quick Start
 
-**1. Enable Chrome remote debugging** — open `chrome://inspect/#remote-debugging` and check "Discover network targets"
+**1. Enable Chrome remote debugging** — open `chrome://inspect/#remote-debugging` and tick **"Allow remote debugging for this browser instance"**
 
 **2. Install the plugin:**
 ```
@@ -134,32 +134,44 @@ Claude: ✅ Updated Hero.tsx — changed
 
 ### Step 1: Enable Chrome Remote Debugging
 
-Design Mode talks to Chrome via the DevTools Protocol. This requires remote debugging to be enabled.
+Design Mode connects to Chrome via the DevTools Protocol. You need to enable remote debugging — this is the same on **macOS, Linux, and Windows**.
 
-<details open>
-<summary><strong>Option A: chrome://inspect (recommended — no restart needed)</strong></summary>
+> **Requires Chrome 144+** (stable since January 2026). Check your version at `chrome://settings/help`.
 
-1. Open Chrome
-2. Navigate to `chrome://inspect/#remote-debugging`
-3. Make sure **"Discover network targets"** is checked
+1. Open **Chrome** (or Chrome Canary / Chromium)
+2. Go to `chrome://inspect/#remote-debugging`
+3. Tick **"Allow remote debugging for this browser instance"**
 
-Done. Chrome writes a `DevToolsActivePort` file that Design Mode auto-discovers.
+That's it. You'll see a message like `Server running at: 127.0.0.1:56829` — this means it's working.
 
-**Verify it worked:**
+> **This works the same on all platforms.** macOS, Linux, Windows — same Chrome URL, same checkbox. No flags, no restart, no terminal commands needed.
+
+<details>
+<summary><strong>How to verify it's working</strong></summary>
+
+Check that the `DevToolsActivePort` file was created:
+
+**macOS:**
 ```bash
-# macOS
 cat ~/Library/Application\ Support/Google/Chrome/DevToolsActivePort
+```
 
-# Linux
+**Linux:**
+```bash
 cat ~/.config/google-chrome/DevToolsActivePort
 ```
 
-You should see a port number (e.g., `9222`) on the first line.
+**Windows (PowerShell):**
+```powershell
+Get-Content "$env:LOCALAPPDATA\Google\Chrome\User Data\DevToolsActivePort"
+```
+
+You should see a port number on the first line (e.g., `56829`).
 
 </details>
 
 <details>
-<summary><strong>Option B: Launch Chrome with a flag</strong></summary>
+<summary><strong>Alternative: Launch Chrome with a flag (if the checkbox method doesn't work)</strong></summary>
 
 Quit Chrome completely, then relaunch with the debugging flag:
 
@@ -173,25 +185,30 @@ open -a "Google Chrome" --args --remote-debugging-port=9222
 google-chrome --remote-debugging-port=9222
 ```
 
-**Windows:**
-```bash
+**Windows (Command Prompt):**
+```cmd
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
+```
+
+**Windows (PowerShell):**
+```powershell
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
 ```
 
 </details>
 
 <details>
-<summary><strong>Option C: Chrome Canary / Chromium</strong></summary>
+<summary><strong>Supported browsers and port file locations</strong></summary>
 
-Design Mode auto-discovers the port file from these locations:
+Design Mode auto-discovers the debugging port from these locations:
 
-| Browser | Port file location |
-|---------|-------------------|
-| **Chrome (macOS)** | `~/Library/Application Support/Google/Chrome/DevToolsActivePort` |
-| **Chrome Canary (macOS)** | `~/Library/Application Support/Google/Chrome Canary/DevToolsActivePort` |
-| **Chrome (Linux)** | `~/.config/google-chrome/DevToolsActivePort` |
-| **Chromium (Linux)** | `~/.config/chromium/DevToolsActivePort` |
-| **Chrome (Windows)** | `%LOCALAPPDATA%\Google\Chrome\User Data\DevToolsActivePort` |
+| Browser | OS | Port file location |
+|---------|----|--------------------|
+| **Chrome** | macOS | `~/Library/Application Support/Google/Chrome/DevToolsActivePort` |
+| **Chrome** | Linux | `~/.config/google-chrome/DevToolsActivePort` |
+| **Chrome** | Windows | `%LOCALAPPDATA%\Google\Chrome\User Data\DevToolsActivePort` |
+| **Chrome Canary** | macOS | `~/Library/Application Support/Google/Chrome Canary/DevToolsActivePort` |
+| **Chromium** | Linux | `~/.config/chromium/DevToolsActivePort` |
 
 </details>
 
@@ -502,7 +519,7 @@ Design Mode auto-detects the source file for annotated elements using framework-
 <summary><strong>"MCP server not connecting" / server not listed in /mcp</strong></summary>
 
 1. **Check Chrome remote debugging is enabled:**
-   - Open `chrome://inspect/#remote-debugging` — is "Discover network targets" checked?
+   - Open `chrome://inspect/#remote-debugging` — is "Allow remote debugging for this browser instance" checked?
    - Or verify the port file exists:
      ```bash
      # macOS
