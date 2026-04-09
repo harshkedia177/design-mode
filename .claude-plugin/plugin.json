@@ -1,0 +1,32 @@
+{
+  "name": "design-mode",
+  "version": "1.0.0",
+  "description": "Visual Design Mode overlay for annotating, inspecting, and modifying UI elements directly in the browser. Click elements to annotate, hover to inspect box models, and let Claude apply your design feedback to source code.",
+  "author": {
+    "name": "Harsh Kedia",
+    "url": "https://github.com/harshkedia177"
+  },
+  "repository": "https://github.com/harshkedia177/design-mode-plugin",
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "design",
+    "ui",
+    "browser",
+    "inspect",
+    "annotate",
+    "css",
+    "chrome",
+    "devtools",
+    "overlay"
+  ],
+  "mcpServers": {
+    "design-mode": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/index.js"],
+      "env": {
+        "NODE_PATH": "${CLAUDE_PLUGIN_DATA}/node_modules"
+      }
+    }
+  }
+}

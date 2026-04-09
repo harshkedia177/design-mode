@@ -1,0 +1,51 @@
+{
+  "name": "design-mode-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for visual Design Mode — annotate, inspect, and modify UI elements directly in the browser via Chrome DevTools Protocol.",
+  "type": "module",
+  "bin": {
+    "design-mode-mcp": "./servers/index.js"
+  },
+  "files": [
+    "servers/index.js",
+    "scripts/overlay.js"
+  ],
+  "main": "servers/index.js",
+  "scripts": {
+    "start": "node servers/index.js",
+    "prepare": "chmod 755 servers/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "design",
+    "browser",
+    "ui",
+    "inspect",
+    "annotate",
+    "css",
+    "chrome",
+    "devtools",
+    "overlay",
+    "frontend"
+  ],
+  "author": {
+    "name": "Harsh Kedia",
+    "url": "https://github.com/harshkedia177"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harshkedia177/design-mode-plugin"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "chrome-remote-interface": "^0.33.2",
+    "ws": "^8.20.0",
+    "zod": "^3.25.76"
+  }
+}

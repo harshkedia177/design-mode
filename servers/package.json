@@ -1,0 +1,13 @@
+{
+  "name": "design-mode-mcp-deps",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dependencies for design-mode plugin (installed via SessionStart hook)",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "chrome-remote-interface": "^0.33.2",
+    "ws": "^8.20.0",
+    "zod": "^3.25.76"
+  }
+}
