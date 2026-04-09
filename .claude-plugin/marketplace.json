@@ -1,14 +1,16 @@
 {
   "name": "design-mode",
   "owner": {
-    "name": "Harsh Kedia",
-    "url": "https://github.com/harshkedia177"
+    "name": "Harsh Kedia"
   },
   "plugins": [
     {
       "name": "design-mode",
       "description": "Visual Design Mode overlay for annotating, inspecting, and modifying UI elements directly in the browser. Click elements to annotate, hover to inspect box models, and let Claude apply your design feedback to source code.",
-      "source": "."
+      "source": {
+        "source": "github",
+        "repo": "harshkedia177/design-mode"
+      }
     }
   ]
 }
