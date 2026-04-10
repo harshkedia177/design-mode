@@ -47,6 +47,7 @@ You point, you type, Claude builds.
 **2. Install the plugin:**
 ```
 /plugin marketplace add harshkedia177/design-mode
+/plugin install design-mode@harshkedia177-design-mode
 ```
 
 **3. Go:**
@@ -219,11 +220,13 @@ Design Mode auto-discovers the debugging port from these locations:
 <details open>
 <summary><strong>Claude Code Plugin (recommended — full experience)</strong></summary>
 
+In Claude Code, add the marketplace and install:
 ```
 /plugin marketplace add harshkedia177/design-mode
+/plugin install design-mode@harshkedia177-design-mode
 ```
 
-This gives you:
+Or use the interactive UI: run `/plugin` → **Discover** tab → select **design-mode** → choose your install scope. This gives you:
 - All 9 MCP tools
 - Auto-read annotations before every message (no manual step)
 - Skills (`/design-mode`, `/annotate`, `/inspect-element`, `/playground`)
@@ -542,6 +545,7 @@ Design Mode auto-detects the source file for annotated elements using framework-
    If `design-mode` isn't listed, reinstall:
    ```
    /plugin marketplace add harshkedia177/design-mode
+   /plugin install design-mode@harshkedia177-design-mode
    ```
 
 </details>
