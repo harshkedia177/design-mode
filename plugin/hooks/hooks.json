@@ -1,24 +1,26 @@
 {
-  "SessionStart": [
-    {
-      "matcher": "",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "diff -q \"${CLAUDE_PLUGIN_ROOT}/servers/package.json\" \"${CLAUDE_PLUGIN_DATA}/package.json\" >/dev/null 2>&1 || (mkdir -p \"${CLAUDE_PLUGIN_DATA}\" && cp \"${CLAUDE_PLUGIN_ROOT}/servers/package.json\" \"${CLAUDE_PLUGIN_DATA}/\" && cd \"${CLAUDE_PLUGIN_DATA}\" && npm install --production 2>&1) || rm -f \"${CLAUDE_PLUGIN_DATA}/package.json\""
-        }
-      ]
-    }
-  ],
-  "UserPromptSubmit": [
-    {
-      "matcher": "",
-      "hooks": [
-        {
-          "type": "prompt",
-          "prompt": "IMPORTANT: If Design Mode is active in the browser (you previously activated the overlay), BEFORE responding to this message, silently check for new annotations by calling mcp__design-mode__read_annotations. If there are annotations, incorporate them into your understanding of what the user is asking. You do NOT need to explicitly mention checking for annotations unless you found some. If Design Mode is not active, ignore this instruction."
-        }
-      ]
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "diff -q \"${CLAUDE_PLUGIN_ROOT}/servers/package.json\" \"${CLAUDE_PLUGIN_DATA}/package.json\" >/dev/null 2>&1 || (mkdir -p \"${CLAUDE_PLUGIN_DATA}\" && cp \"${CLAUDE_PLUGIN_ROOT}/servers/package.json\" \"${CLAUDE_PLUGIN_DATA}/\" && cd \"${CLAUDE_PLUGIN_DATA}\" && npm install --production 2>&1) || rm -f \"${CLAUDE_PLUGIN_DATA}/package.json\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "IMPORTANT: If Design Mode is active in the browser (you previously activated the overlay), BEFORE responding to this message, silently check for new annotations by calling mcp__design-mode__read_annotations. If there are annotations, incorporate them into your understanding of what the user is asking. You do NOT need to explicitly mention checking for annotations unless you found some. If Design Mode is not active, ignore this instruction."
+          }
+        ]
+      }
+    ]
+  }
 }
