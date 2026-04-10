@@ -11,7 +11,7 @@ import { homedir } from "os";
 import { z } from "zod";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OVERLAY_PATH = join(__dirname, "..", "scripts", "overlay.js");
+const OVERLAY_PATH = join(__dirname, "overlay.js");
 
 // ─── Chrome Port Discovery ───────────────────────────────────
 const CHROME_PROFILE_PATHS = [
