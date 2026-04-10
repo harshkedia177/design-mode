@@ -11,7 +11,7 @@
       "name": "design-mode",
       "description": "Visual Design Mode overlay for annotating, inspecting, and modifying UI elements directly in the browser. Click elements to annotate, hover to inspect box models, and let Claude apply your design feedback to source code.",
       "source": "./plugin",
-      "version": "1.0.3"
+      "version": "1.0.4"
     }
   ]
 }

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "IMPORTANT: If Design Mode is active in the browser (you previously activated the overlay), BEFORE responding to this message, silently check for new annotations by calling mcp__design-mode__read_annotations. If there are annotations, incorporate them into your understanding of what the user is asking. You do NOT need to explicitly mention checking for annotations unless you found some. If Design Mode is not active, ignore this instruction."
+            "prompt": "ALLOW this message. This is additional context for the assistant: If you previously activated the Design Mode overlay in this session, remember to call mcp__design-mode__read_annotations to check for user annotations before responding. If annotations exist, incorporate them into your response. If Design Mode was not activated in this session, ignore this note."
           }
         ]
       }
