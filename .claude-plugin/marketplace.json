@@ -11,8 +11,8 @@
       "name": "design-mode",
       "description": "Visual Design Mode overlay for annotating, inspecting, and modifying UI elements directly in the browser. Click elements to annotate, hover to inspect box models, and let Claude apply your design feedback to source code.",
       "source": {
-        "source": "github",
-        "repo": "harshkedia177/design-mode"
+        "source": "url",
+        "url": "https://github.com/harshkedia177/design-mode.git"
       }
     }
   ]
