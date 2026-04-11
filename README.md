@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="Design Mode" src="assets/banner.png" width="700">
+<img alt="Design Mode" src="plugin/assets/banner.png" width="700">
 
 ### Point at your UI. Tell Claude what to change. Watch it happen.
 
@@ -14,11 +14,10 @@ Stop describing UI changes in chat. Click the element, type what you want, and C
 
 ---
 
-<!-- TODO: Replace with actual demo GIF -->
-<!-- <div align="center">
-  <img src="assets/demo.gif" alt="Design Mode demo" width="700">
+<div align="center">
+  <img src="plugin/assets/design-mode-demo.gif" alt="Design Mode demo" width="700">
   <p><em>Hover to inspect. Click to annotate. Claude applies the changes.</em></p>
-</div> -->
+</div>
 
 ## The Workflow
 
